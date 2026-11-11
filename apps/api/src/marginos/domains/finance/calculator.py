@@ -226,3 +226,68 @@ def explain_product(
         cogs_share_pct=_ratio(summary.cogs, summary.gross),
         worst_captures=per_capture[:3],
     )
+
+
+# --- Simulation --------------------------------------------------------------------------------
+
+
+@dataclass(frozen=True)
+class FeeBasis:
+    rate: Decimal | None
+    sample_size: int
+    currency: str
+
+
+@dataclass(frozen=True)
+class SimulationResult:
+    gross: Decimal
+    est_paypal_fee: Decimal | None
+    est_net: Decimal
+    cogs: Decimal
+    variable: Decimal | None
+    est_contribution: Decimal
+    est_margin_pct: Decimal | None
+    fee_basis: FeeBasis
+    fee_unknown: bool
+    estimated: bool = True
+
+
+def effective_fee_rate(lines: list[CaptureLine], currency: str) -> FeeBasis:
+    """Observed PayPal fee rate (sum of fees / sum of gross) over captures with a known fee."""
+    known = [ln for ln in lines if ln.currency == currency and ln.paypal_fee is not None]
+    gross = sum((ln.gross for ln in known), ZERO)
+    if not known or gross == ZERO:
+        return FeeBasis(rate=None, sample_size=0, currency=currency)
+    fees = sum((ln.paypal_fee for ln in known), ZERO)
+    return FeeBasis(rate=q4(fees / gross), sample_size=len(known), currency=currency)
+
+
+def simulate(
+    *,
+    currency: str,
+    selling_price: Decimal,
+    alt_unit_cost: Decimal,
+    fee_basis: FeeBasis,
+    quantity: int = 1,
+    variable_cost_per_unit: Decimal | None = None,
+) -> SimulationResult:
+    """What-if economics for a price or cost change. Always labelled estimated."""
+    if fee_basis.currency != currency:
+        raise ValueError(f"fee basis is {fee_basis.currency}, simulation is {currency}")
+    gross = q2(selling_price * quantity)
+    fee = q2(gross * fee_basis.rate) if fee_basis.rate is not None else None
+    est_net = q2(gross - (fee or ZERO))
+    cogs = q2(alt_unit_cost * quantity)
+    variable = q2(variable_cost_per_unit * quantity) if variable_cost_per_unit is not None else None
+    contribution = q2(est_net - cogs - (variable or ZERO))
+    return SimulationResult(
+        gross=gross,
+        est_paypal_fee=fee,
+        est_net=est_net,
+        cogs=cogs,
+        variable=variable,
+        est_contribution=contribution,
+        est_margin_pct=_ratio(contribution, gross),
+        fee_basis=fee_basis,
+        fee_unknown=fee_basis.rate is None,
+    )
