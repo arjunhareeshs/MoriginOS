@@ -14,7 +14,11 @@ os.environ.setdefault("APP_ENV", "development")
 
 from marginos.core.config import get_settings  # noqa: E402
 from marginos.core.db import Base, get_db  # noqa: E402
+from marginos.core.models_registry import import_all_models  # noqa: E402
 from marginos.main import create_app  # noqa: E402
+
+import_all_models()
+
 
 def _test_database_url(url: str) -> str:
     base, _, dbname = url.rpartition("/")
@@ -36,7 +40,7 @@ def engine():
 
 
 @pytest.fixture
-def db(engine) -> Generator[Session, None, None]:
+def db(engine) -> Generator[Session]:
     connection = engine.connect()
     transaction = connection.begin()
     session = sessionmaker(bind=connection, join_transaction_mode="create_savepoint")()
@@ -49,10 +53,10 @@ def db(engine) -> Generator[Session, None, None]:
 
 
 @pytest.fixture
-def client(db: Session) -> Generator[TestClient, None, None]:
+def client(db: Session) -> Generator[TestClient]:
     app = create_app()
 
-    def _override() -> Generator[Session, None, None]:
+    def _override() -> Generator[Session]:
         yield db
 
     app.dependency_overrides[get_db] = _override

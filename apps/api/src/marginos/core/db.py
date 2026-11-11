@@ -30,7 +30,7 @@ def SessionLocal() -> Session:  # noqa: N802 - conventional name
     return _session_factory()()
 
 
-def get_db() -> Generator[Session, None, None]:
+def get_db() -> Generator[Session]:
     """FastAPI dependency: one session per request, closed afterwards."""
     session = SessionLocal()
     try:
@@ -40,7 +40,7 @@ def get_db() -> Generator[Session, None, None]:
 
 
 @contextmanager
-def session_scope() -> Generator[Session, None, None]:
+def session_scope() -> Generator[Session]:
     """Commit on success, roll back on error. For background work outside requests."""
     session = SessionLocal()
     try:
