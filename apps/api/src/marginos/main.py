@@ -11,6 +11,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from marginos import __version__
 from marginos.core.config import get_settings
+from marginos.core.events import router as events_router
 from marginos.core.logging import configure_logging
 from marginos.core.models_registry import import_all_models
 
@@ -46,6 +47,7 @@ def create_app() -> FastAPI:
     def health() -> dict[str, str]:
         return {"status": "ok", "env": settings.app_env}
 
+    app.include_router(events_router)
     return app
 
 
