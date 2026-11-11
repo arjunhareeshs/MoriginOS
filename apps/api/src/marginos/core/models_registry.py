@@ -4,7 +4,10 @@ from __future__ import annotations
 
 import importlib
 
-MODEL_MODULES: tuple[str, ...] = ("marginos.domains.catalog.models",)
+MODEL_MODULES: tuple[str, ...] = (
+    "marginos.domains.catalog.models",
+    "marginos.domains.operations.models",
+)
 
 
 def import_all_models() -> None:
