@@ -14,7 +14,7 @@ Prerequisites: Python 3.13, Node 23, Docker.
 
 ```bash
 cp apps/env.example .env            # then fill in the values
-docker compose up -d db             # Postgres 16 on localhost:5432
+docker compose up -d db             # Postgres 16 on localhost:5433 (5432 is often taken)
 cd apps/api && pip install -e ".[dev]"
 alembic upgrade head
 uvicorn marginos.main:app --reload --port 8000

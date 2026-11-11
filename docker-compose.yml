@@ -1,0 +1,22 @@
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: marginos-db
+    environment:
+      POSTGRES_USER: marginos
+      POSTGRES_PASSWORD: marginos
+      POSTGRES_DB: marginos
+    ports:
+      # Host port 5433: many Windows machines run a native Postgres on 5432.
+      - "5433:5432"
+    volumes:
+      - marginos-pgdata:/var/lib/postgresql/data
+      - ./scripts/db/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U marginos -d marginos"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+volumes:
+  marginos-pgdata:
