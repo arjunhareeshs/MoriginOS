@@ -1,0 +1,17 @@
+{
+  "id": "REF-TEST-001",
+  "status": "COMPLETED",
+  "amount": { "currency_code": "USD", "value": "5.00" },
+  "seller_payable_breakdown": {
+    "gross_amount": { "currency_code": "USD", "value": "5.00" },
+    "paypal_fee": { "currency_code": "USD", "value": "0.00" },
+    "net_amount": { "currency_code": "USD", "value": "5.00" },
+    "total_refunded_amount": { "currency_code": "USD", "value": "5.00" }
+  },
+  "create_time": "2026-11-11T11:00:00Z",
+  "update_time": "2026-11-11T11:00:02Z",
+  "links": [
+    { "href": "https://api-m.sandbox.paypal.com/v2/payments/refunds/REF-TEST-001", "rel": "self", "method": "GET" },
+    { "href": "https://api-m.sandbox.paypal.com/v2/payments/captures/CAP-TEST-001", "rel": "up", "method": "GET" }
+  ]
+}

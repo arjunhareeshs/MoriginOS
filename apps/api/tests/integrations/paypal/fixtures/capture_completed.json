@@ -1,0 +1,21 @@
+{
+  "id": "CAP-TEST-001",
+  "status": "COMPLETED",
+  "amount": { "currency_code": "USD", "value": "29.99" },
+  "final_capture": true,
+  "custom_id": "EARBUDS-PRO",
+  "seller_protection": { "status": "ELIGIBLE" },
+  "seller_receivable_breakdown": {
+    "gross_amount": { "currency_code": "USD", "value": "29.99" },
+    "paypal_fee": { "currency_code": "USD", "value": "1.54" },
+    "net_amount": { "currency_code": "USD", "value": "28.45" }
+  },
+  "supplementary_data": { "related_ids": { "order_id": "ORD-TEST-001" } },
+  "create_time": "2026-11-11T10:00:00Z",
+  "update_time": "2026-11-11T10:00:05Z",
+  "links": [
+    { "href": "https://api-m.sandbox.paypal.com/v2/payments/captures/CAP-TEST-001", "rel": "self", "method": "GET" },
+    { "href": "https://api-m.sandbox.paypal.com/v2/payments/captures/CAP-TEST-001/refund", "rel": "refund", "method": "POST" },
+    { "href": "https://api-m.sandbox.paypal.com/v2/checkout/orders/ORD-TEST-001", "rel": "up", "method": "GET" }
+  ]
+}
