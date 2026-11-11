@@ -14,6 +14,7 @@ from marginos.core.config import get_settings
 from marginos.core.events import router as events_router
 from marginos.core.logging import configure_logging
 from marginos.core.models_registry import import_all_models
+from marginos.domains.webhooks.router import router as webhooks_router
 
 log = logging.getLogger("marginos")
 
@@ -48,6 +49,7 @@ def create_app() -> FastAPI:
         return {"status": "ok", "env": settings.app_env}
 
     app.include_router(events_router)
+    app.include_router(webhooks_router)
     return app
 
 

@@ -7,6 +7,7 @@ import importlib
 MODEL_MODULES: tuple[str, ...] = (
     "marginos.domains.catalog.models",
     "marginos.domains.operations.models",
+    "marginos.domains.webhooks.models",
 )
 
 

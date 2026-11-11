@@ -2,8 +2,8 @@
 
 from __future__ import annotations
 
-from collections.abc import Generator
-from contextlib import contextmanager
+from collections.abc import Callable, Generator
+from contextlib import AbstractContextManager, contextmanager
 from functools import lru_cache
 
 from sqlalchemy import Engine, create_engine
@@ -51,3 +51,11 @@ def session_scope() -> Generator[Session]:
         raise
     finally:
         session.close()
+
+
+SessionScope = Callable[[], AbstractContextManager[Session]]
+
+
+def get_session_scope() -> SessionScope:
+    """Dependency for background work: returns the factory, so tests can substitute it."""
+    return session_scope
