@@ -1,0 +1,1 @@
+"""PayPal adapter tests."""

@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 import logging
+from typing import Annotated
 
 from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, Request
 from sqlalchemy.orm import Session
@@ -23,10 +24,10 @@ router = APIRouter(tags=["webhooks"])
 async def paypal_webhook(
     request: Request,
     background: BackgroundTasks,
-    db: Session = Depends(get_db),
-    settings: Settings = Depends(get_settings),
-    paypal: PayPalClient = Depends(get_paypal_client),
-    scope: SessionScope = Depends(get_session_scope),
+    db: Annotated[Session, Depends(get_db)],
+    settings: Annotated[Settings, Depends(get_settings)],
+    paypal: Annotated[PayPalClient, Depends(get_paypal_client)],
+    scope: Annotated[SessionScope, Depends(get_session_scope)],
 ) -> dict[str, bool]:
     raw = await request.body()
     skip = settings.paypal_webhook_skip_verify and settings.app_env == "development"

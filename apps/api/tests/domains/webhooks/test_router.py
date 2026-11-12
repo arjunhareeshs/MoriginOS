@@ -35,7 +35,7 @@ def wired(client):
     app.dependency_overrides[get_paypal_client] = lambda: PayPalClient(
         base_url=BASE, client_id="cid", client_secret="sec"
     )
-    app.dependency_overrides[get_settings] = _settings
+    app.dependency_overrides[get_settings] = lambda: _settings()
     return client
 
 

@@ -44,6 +44,8 @@ filterwarnings = ["error::DeprecationWarning:marginos.*"]
 line-length = 100
 target-version = "py313"
 src = ["src", "tests"]
+# Alembic autogenerate output is not hand-maintained; keep it verbatim.
+extend-exclude = ["migrations/versions"]
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "B", "UP", "SIM"]
